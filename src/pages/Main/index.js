@@ -6,24 +6,24 @@ import api from "../../services/api";
 
 
 export default function Main() {
-
+    
     const [newRepo, setnewRepo] = useState('');
     const [repositorios, setRepositorios] = useState([]);
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState(null)
-
+  
     //buscar -> DidMount
     useEffect(()=>{
-        const repoStorage = localStorage.getItem('repos');
-        if(repoStorage){
+        const repoStorage = localStorage.getItem('@repos');        
+        if(repoStorage  !== '[]'){
             setRepositorios(JSON.parse(repoStorage));
         }
-    },[]);
+    },[]); 
 
 
     //Salvar alterações -> DidUpdate
     useEffect(()=>{
-        localStorage.setItem('repos', JSON.stringify(repositorios));
+        localStorage.setItem('@repos', JSON.stringify(repositorios));
     },[repositorios])
 
     const handleSubmit = useCallback((e) => {
