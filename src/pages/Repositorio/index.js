@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react"
-import {Container} from './style';
+import {Container, Loading, Owner, ButtonBack, IssuesList} from './style';
+import { FaArrowLeft } from "react-icons/fa";
 import { useParams } from "react-router-dom"
 import api from '../../services/api'
 
@@ -28,15 +29,51 @@ export default function Repositorio(){
             ]);
            setRepositorio(repositorioData.data);
            setIssues(issuesData.data);
+           console.log(issuesData.data);
            setLoading(false);
               
             }
             load();     
     },[id.repositorio])
+
+    if(loading){
+        return(
+            <Loading>
+                <h1>Carregando...</h1>
+            </Loading>
+        )
+    }
+
     return (
         <Container>
-            
-        
+            <ButtonBack to="/">
+                <FaArrowLeft color="#000" size={30}/>
+            </ButtonBack>
+            <Owner>
+                <img 
+                src={repositorio.owner.avatar_url} 
+                alt={repositorio.owner.login}
+                />
+                <h1>{repositorio.name}</h1>
+                <p>{repositorio.description}</p>
+            </Owner>
+            <IssuesList>
+                {issues.map(issue => (
+                    <li key={String(issue.id)}>
+                        <img src={issue.user.avatar_url} alt={issue.user.login}/>
+                        <div>
+                            <strong>
+                                <a href={issue.html_url}>{issue.title}</a>
+                                {issue.labels.map(label =>(
+                                    <span key={String(label.id)}>{label.name}</span>
+                                ))}
+                            </strong>
+                            <p>{issue.user.login}</p>
+                        </div>
+                    </li>
+                ))} 
+                
+            </IssuesList>
 
         </Container>
     )
